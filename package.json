@@ -1,0 +1,26 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "showing weather inforamtion for given location",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omergencoglu/weather-app.git"
+  },
+  "keywords": [
+    "axios",
+    "API",
+    "call"
+  ],
+  "author": "Omer Gencoglu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/omergencoglu/weather-app/issues"
+  },
+  "homepage": "https://github.com/omergencoglu/weather-app#readme",
+  "dependencies": {},
+  "devDependencies": {}
+}
