@@ -1,7 +1,9 @@
-const weather = () => {
+const searchData = () => {
+  const location = document.getElementById("user-input").value;
+
   axios
     .get(
-      `http://api.openweathermap.org/data/2.5/weather?q=Toronto&appid=${config.WEATHER_API}&units=metric`
+      `http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${config.WEATHER_API}&units=metric`
     )
     .then(function (response) {
       console.log(response.data.main.temp);
@@ -11,4 +13,3 @@ const weather = () => {
       console.log(error);
     });
 };
-weather();
