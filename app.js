@@ -1,15 +1,33 @@
-const searchData = () => {
-  const location = document.getElementById("user-input").value;
+const input = document.getElementById("user-input");
+const userLocation = document.getElementById("userLocation");
+const temperature = document.getElementById("temperature");
+const condition = document.getElementById("condition");
 
-  axios
-    .get(
-      `http://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${config.WEATHER_API}&units=metric`
-    )
-    .then(function (response) {
-      console.log(response.data.main.temp);
-      console.log(response.data.weather[0].main);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+const searchData = () => {
+  const locationInput = input.value;
+  if (!locationInput || Number.isInteger(parseInt(locationInput))) {
+    return console.log("There is no such place!");
+  } else {
+    axios
+      .get(
+        `http://api.openweathermap.org/data/2.5/weather?q=${locationInput}&appid=${config.WEATHER_API}&units=metric`
+      )
+      .then(function (response) {
+        console.log(response.data);
+        userLocation.innerHTML =
+          response.data.name + ", " + response.data.sys.country;
+        temperature.innerHTML = Math.round(response.data.main.temp);
+        condition.innerHTML = response.data.weather[0].main;
+      })
+      .catch(function (error) {
+        console.log(error);
+        console.log("We couldn't find the place you are looking for!");
+      });
+  }
 };
+
+input.addEventListener("keyup", ({ key }) => {
+  if (key === "Enter") {
+    searchData();
+  }
+});
