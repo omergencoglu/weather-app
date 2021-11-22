@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Barlow&family=PT+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 body {
-  background-color: hsl(194, 100%, 94%);
-  font-family: "Borlow", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 1.5rem;
   color: #4a4b4e;
+  margin: 0;
 }
 
 img {
@@ -17,6 +17,7 @@ img {
   justify-content: center;
   flex-direction: column;
   height: 100%;
+  background: hsl(194, 100%, 94%);
 }
 
 .main-box {
