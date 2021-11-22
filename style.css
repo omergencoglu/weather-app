@@ -1,3 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow&family=PT+Sans&display=swap");
+
+body {
+  background-color: hsl(194, 100%, 94%);
+  font-family: "Borlow", sans-serif;
+  font-size: 1.5rem;
+  color: #4a4b4e;
+}
+
+img {
+  width: auto;
+}
+
 .container {
   display: flex;
   align-items: center;
@@ -6,7 +19,39 @@
   height: 100%;
 }
 
-.container div {
-  width: 100px;
-  height: 100px;
+.main-box {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 10%;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.search-bar {
+  box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
+  width: 100%;
+  padding: 0 10% 5% 10%;
+  /* border-bottom: 1px solid #b3b4b7; */
+}
+
+#user-input {
+  border-color: transparent;
+  outline: none;
+  font-size: large;
+}
+
+.search-bar button,
+input {
+  display: inline;
+}
+
+.condt {
+  width: 90%;
+}
+
+.condition {
+  text-align: center;
+  margin-top: -5%;
 }

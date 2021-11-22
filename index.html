@@ -13,14 +13,18 @@
   </head>
   <body>
     <div class="container">
-      <div class="search-bar">
-        <input type="text" id="user-input" placeholder="Enter a location" />
-        <button onclick="searchData()">-></button>
+      <div class="main-box">
+        <div class="search-bar">
+          <input type="text" id="user-input" placeholder="Enter a location" />
+          <button onclick="searchData()">-></button>
+        </div>
+        <div class="condt">
+          <div><img id="conditionImage" src="" alt="" /></div>
+          <div id="condition" class="condition">-</div>
+        </div>
+        <div id="userLocation" class="userLocation">-</div>
+        <div id="temperature" class="temperature">?</div>
       </div>
-      <div id="userLocation" class="userLocation">-</div>
-      <div id="temperature" class="temperature">?</div>
-      <div><img id="conditionImage" src="" alt="" /></div>
-      <div id="condition" class="condition">-</div>
     </div>
   </body>
 </html>

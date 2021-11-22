@@ -4,6 +4,18 @@ const temperature = document.getElementById("temperature");
 const conditionImage = document.getElementById("conditionImage");
 const condition = document.getElementById("condition");
 
+const capitalizeInitials = (arr) => {
+  const words = arr.split(" ");
+
+  for (let i = 0; i < words.length; i++) {
+    words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+  }
+
+  return words.join(" ");
+};
+
+console.log(capitalizeInitials("omer"));
+
 const searchData = () => {
   const locationInput = input.value;
   if (!locationInput || Number.isInteger(parseInt(locationInput))) {
@@ -17,10 +29,12 @@ const searchData = () => {
         console.log(response.data);
         userLocation.innerHTML =
           response.data.name + ", " + response.data.sys.country;
-        temperature.innerHTML = Math.round(response.data.main.temp);
+        temperature.innerHTML = Math.round(response.data.main.temp) + "°";
         conditionImage.alt = response.data.weather[0].main;
         conditionImage.src = `img/${response.data.weather[0].icon}.svg`;
-        condition.innerHTML = response.data.weather[0].main;
+        condition.innerHTML = capitalizeInitials(
+          response.data.weather[0].description
+        );
       })
       .catch(function (error) {
         console.log(error);
