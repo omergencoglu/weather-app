@@ -6,32 +6,7 @@ const condition = document.getElementById("condition");
 const backgroundGrad = document.getElementById("container");
 
 //backgroud gradients from https://cdpn.io/rDEAl
-const grads = [
-  [
-    { color: "00000c", position: 0 },
-    { color: "00000c", position: 0 },
-  ],
-  [
-    { color: "020111", position: 85 },
-    { color: "191621", position: 100 },
-  ],
-  [
-    { color: "020111", position: 60 },
-    { color: "20202c", position: 100 },
-  ],
-  [
-    { color: "020111", position: 10 },
-    { color: "3a3a52", position: 100 },
-  ],
-  [
-    { color: "20202c", position: 0 },
-    { color: "515175", position: 100 },
-  ],
-  [
-    { color: "40405c", position: 0 },
-    { color: "6f71aa", position: 80 },
-    { color: "8a76ab", position: 100 },
-  ],
+const dayGrads = [
   [
     { color: "4a4969", position: 0 },
     { color: "7072ab", position: 50 },
@@ -105,6 +80,8 @@ const grads = [
     { color: "8A3B12", position: 80 },
     { color: "240E03", position: 100 },
   ],
+];
+const nightGrads = [
   [
     { color: "010A10", position: 30 },
     { color: "59230B", position: 80 },
@@ -117,6 +94,31 @@ const grads = [
   [
     { color: "00000c", position: 80 },
     { color: "150800", position: 100 },
+  ],
+  [
+    { color: "00000c", position: 0 },
+    { color: "00000c", position: 0 },
+  ],
+  [
+    { color: "020111", position: 85 },
+    { color: "191621", position: 100 },
+  ],
+  [
+    { color: "020111", position: 60 },
+    { color: "20202c", position: 100 },
+  ],
+  [
+    { color: "020111", position: 10 },
+    { color: "3a3a52", position: 100 },
+  ],
+  [
+    { color: "20202c", position: 0 },
+    { color: "515175", position: 100 },
+  ],
+  [
+    { color: "40405c", position: 0 },
+    { color: "6f71aa", position: 80 },
+    { color: "8a76ab", position: 100 },
   ],
 ];
 
@@ -134,9 +136,9 @@ const toCSSGradient = (data) => {
 };
 
 //background change
-backgroundGrad.style.background = toCSSGradient(grads[16]);
+backgroundGrad.style.background = toCSSGradient(dayGrads[14]);
 
-//transform unixtimestamp to date
+//transform unixtimestamp to date and return in minute format
 const getTimeInfo = (unixSunrise, unixSunset, unixCurrentTime) => {
   const sunrise = new Date(unixSunrise * 1000);
   const sunriseHour = sunrise.getHours();
@@ -148,6 +150,31 @@ const getTimeInfo = (unixSunrise, unixSunset, unixCurrentTime) => {
   const currentHour = currentTime.getHours();
   return { sunriseHour, sunsetHour, currentHour };
 };
+
+//sunset sunrise time difference
+const timeDifference = (sunrise, sunset) => {
+  if (sunrise <= sunset) {
+    return sunset - sunrise;
+  } else if (sunrise > sunset) {
+    return sunset + 24 - sunrise;
+  }
+};
+
+const minutesCalculation = (totalhours) => {
+  dayRange = (totalhours * 60) / 15;
+
+  //creating data ranges to map grades
+  let minuteRanges = [];
+  for (let i = 1; i < 16; i++) {
+    minuteRanges.push(dayRange * i);
+  }
+  console.log(minuteRanges);
+  //will be continue
+  //   newDayGrads = riskNamesArr.map( function(x, i){
+  //     return {"name": x, "state": riskWorkflowStateArr[i]}
+  // }.bind(this));
+};
+console.log(minutesCalculation(9));
 
 //capitalize condition description
 const capitalizeInitials = (arr) => {
@@ -181,11 +208,18 @@ const searchData = () => {
           response.data.weather[0].description
         );
 
-        const sunrise = response.data.sys.sunrise;
-        const sunset = response.data.sys.sunset;
-        const currentTime = response.data.dt;
+        const sunrise = parseInt(response.data.sys.sunrise);
+        const sunset = parseInt(response.data.sys.sunset);
+        const currentTime = parseInt(response.data.dt);
 
-        console.log(getTimeInfo(sunrise, sunset, currentTime));
+        timeInformation = getTimeInfo(sunrise, sunset, currentTime);
+        console.log(timeInformation);
+        console.log(
+          timeDifference(
+            timeInformation.sunriseHour,
+            timeInformation.sunsetHour
+          )
+        );
       })
       .catch(function (error) {
         console.log(error);
