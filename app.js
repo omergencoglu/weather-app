@@ -135,9 +135,6 @@ const toCSSGradient = (data) => {
   return `${css} )`;
 };
 
-//background change
-// backgroundGrad.style.background = toCSSGradient(dayGrads[14]);
-
 //transform unixtimestamp to date and return in minute format
 const getTimeInfo = (unixSunrise, unixSunset, unixCurrentTime) => {
   const sunrise = new Date(unixSunrise * 1000);
@@ -152,7 +149,7 @@ const getTimeInfo = (unixSunrise, unixSunset, unixCurrentTime) => {
 };
 
 //sunset sunrise time difference
-const timeDifference = (sunrise, sunset) => {
+const getTimeDifference = (sunrise, sunset) => {
   if (sunrise <= sunset) {
     return sunset - sunrise;
   } else if (sunrise > sunset) {
@@ -160,44 +157,41 @@ const timeDifference = (sunrise, sunset) => {
   }
 };
 
-const minutesCalculation = (totalhours) => {
-  dayRange = (totalhours * 60) / 15;
+const minutesCalculation = (totalhours, sunriseHour) => {
+  const sunriseMin = sunriseHour * 60;
+  const dayRange = (totalhours * 60) / 15;
 
   //create data ranges to map grades
   let minuteRanges = [];
   for (let i = 1; i < 16; i++) {
-    minuteRanges.push(dayRange * i);
+    minuteRanges.push(dayRange * i + sunriseMin);
   }
 
   //create new list with range and gradients
   const newDayGrads = {};
   minuteRanges.forEach((x, i) => (newDayGrads[x] = dayGrads[i]));
-  return newDayGrads;
+  return { newDayGrads, dayRange };
 };
 
-// console.log(minutesCalculation(12));
-
 //return conditional gradient according to current time
-const selectGradient = (currentHour, totalhours) => {
+const selectGradient = (currentHour, totalhours, sunriseHour) => {
   const current = currentHour * 60;
-  const newDayGrads = minutesCalculation(totalhours);
-
-  //decide which gradient to apply
-  for (let i = 0; i < 14; i++) {
-    if (
-      parseInt(Object.keys(newDayGrads)[i]) < current &&
-      current <= parseInt(Object.keys(newDayGrads)[i + 1])
-    ) {
-      console.log(newDayGrads);
-      return newDayGrads[Object.keys(newDayGrads)[i + 1]];
-    } else {
-      return newDayGrads[Object.keys(newDayGrads)[0]];
+  const newDayGrads = minutesCalculation(totalhours, sunriseHour).newDayGrads;
+  // console.log(sunriseHour);
+  // console.log(current);
+  // console.log(newDayGrads);
+  let i = 0;
+  while (i < 15) {
+    if (current <= parseInt(Object.keys(newDayGrads)[i])) {
+      // console.log(newDayGrads[Object.keys(newDayGrads)[i]]);
+      return newDayGrads[Object.keys(newDayGrads)[i]];
     }
+    i++;
   }
 };
 
-// apply background for day
-backgroundGrad.style.background = toCSSGradient(selectGradient(1, 15));
+// console.log(selectGradient(2, 14, 1));
+// console.log(minutesCalculation(10).newDayGrads);
 
 //capitalize condition description
 const capitalizeInitials = (arr) => {
@@ -235,11 +229,21 @@ const searchData = () => {
         const currentTime = parseInt(response.data.dt);
 
         timeInformation = getTimeInfo(sunrise, sunset, currentTime);
-        console.log(timeInformation);
-        console.log(
-          timeDifference(
-            timeInformation.sunriseHour,
-            timeInformation.sunsetHour
+        timeDifference = getTimeDifference(
+          timeInformation.sunriseHour,
+          timeInformation.sunsetHour
+        );
+        // console.log(timeInformation.currentHour);
+        // console.log(timeDifference);
+        // console.log(
+        //   selectGradient(timeInformation.currentHour, timeDifference)
+        // );
+        // apply background for day
+        backgroundGrad.style.background = toCSSGradient(
+          selectGradient(
+            timeInformation.currentHour,
+            timeDifference,
+            timeInformation.sunriseHour
           )
         );
       })
