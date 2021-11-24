@@ -136,7 +136,7 @@ const toCSSGradient = (data) => {
 };
 
 //background change
-backgroundGrad.style.background = toCSSGradient(dayGrads[14]);
+// backgroundGrad.style.background = toCSSGradient(dayGrads[14]);
 
 //transform unixtimestamp to date and return in minute format
 const getTimeInfo = (unixSunrise, unixSunset, unixCurrentTime) => {
@@ -163,18 +163,41 @@ const timeDifference = (sunrise, sunset) => {
 const minutesCalculation = (totalhours) => {
   dayRange = (totalhours * 60) / 15;
 
-  //creating data ranges to map grades
+  //create data ranges to map grades
   let minuteRanges = [];
   for (let i = 1; i < 16; i++) {
     minuteRanges.push(dayRange * i);
   }
-  console.log(minuteRanges);
-  //will be continue
-  //   newDayGrads = riskNamesArr.map( function(x, i){
-  //     return {"name": x, "state": riskWorkflowStateArr[i]}
-  // }.bind(this));
+
+  //create new list with range and gradients
+  const newDayGrads = {};
+  minuteRanges.forEach((x, i) => (newDayGrads[x] = dayGrads[i]));
+  return newDayGrads;
 };
-console.log(minutesCalculation(9));
+
+// console.log(minutesCalculation(12));
+
+//return conditional gradient according to current time
+const selectGradient = (currentHour, totalhours) => {
+  const current = currentHour * 60;
+  const newDayGrads = minutesCalculation(totalhours);
+
+  //decide which gradient to apply
+  for (let i = 0; i < 14; i++) {
+    if (
+      parseInt(Object.keys(newDayGrads)[i]) < current &&
+      current <= parseInt(Object.keys(newDayGrads)[i + 1])
+    ) {
+      console.log(newDayGrads);
+      return newDayGrads[Object.keys(newDayGrads)[i + 1]];
+    } else {
+      return newDayGrads[Object.keys(newDayGrads)[0]];
+    }
+  }
+};
+
+// apply background for day
+backgroundGrad.style.background = toCSSGradient(selectGradient(1, 15));
 
 //capitalize condition description
 const capitalizeInitials = (arr) => {
@@ -197,7 +220,6 @@ const searchData = () => {
         `http://api.openweathermap.org/data/2.5/weather?q=${locationInput}&appid=${config.WEATHER_API}&units=metric`
       )
       .then(function (response) {
-        console.log(response.data);
         //update divs with new information
         userLocation.innerHTML =
           response.data.name + ", " + response.data.sys.country;
