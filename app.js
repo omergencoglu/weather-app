@@ -148,50 +148,99 @@ const getTimeInfo = (unixSunrise, unixSunset, unixCurrentTime) => {
   return { sunriseHour, sunsetHour, currentHour };
 };
 
-//sunset sunrise time difference
-const getTimeDifference = (sunrise, sunset) => {
-  if (sunrise <= sunset) {
-    return sunset - sunrise;
-  } else if (sunrise > sunset) {
-    return sunset + 24 - sunrise;
+const selectGrads = (current, sunrise, sunset) => {
+  if (sunrise >= sunset) {
+    if (current > sunrise || current < sunset) {
+      return dayGrads;
+    } else {
+      return nightGrads;
+    }
+  } else if (sunset > sunrise) {
+    if (current < sunrise || current > sunset) {
+      return nightGrads;
+    } else {
+      return dayGrads;
+    }
   }
 };
 
-const minutesCalculation = (totalhours, sunriseHour) => {
+//day or night length
+const getTimeDifference = (sunrise, sunset, selectedGrads) => {
+  if (selectedGrads === dayGrads) {
+    if (sunrise <= sunset) {
+      return sunset - sunrise;
+    } else if (sunrise > sunset) {
+      return sunset + 24 - sunrise;
+    }
+  } else if (selectedGrads === nightGrads) {
+    if (sunrise <= sunset) {
+      return 24 - sunset + sunrise;
+    } else if (sunrise > sunset) {
+      return sunrise - sunset;
+    }
+  }
+};
+
+const minutesCalculation = (
+  totalhours,
+  sunriseHour,
+  sunsetHour,
+  selectedGrads
+) => {
   const sunriseMin = sunriseHour * 60;
-  const dayRange = (totalhours * 60) / 15;
+  const sunsetMin = sunsetHour * 60;
+  const minuteRange = Math.round((totalhours * 60) / selectedGrads.length);
+  const baseValue = selectedGrads === dayGrads ? sunriseMin : sunsetMin;
 
   //create data ranges to map grades
-  let minuteRanges = [];
-  for (let i = 1; i < 16; i++) {
-    minuteRanges.push(dayRange * i + sunriseMin);
+  let x = 1;
+  let minuteRangeList = [];
+  for (let i = 1; i < selectedGrads.length + 1; i++) {
+    if (minuteRange * i + baseValue <= 1440) {
+      minuteRangeList.push(minuteRange * i + baseValue);
+    } else {
+      minuteRangeList.push(minuteRange * x);
+      x++;
+    }
   }
 
   //create new list with range and gradients
-  const newDayGrads = {};
-  minuteRanges.forEach((x, i) => (newDayGrads[x] = dayGrads[i]));
-  return { newDayGrads, dayRange };
+  const newGrads = {};
+  minuteRangeList.forEach((x, i) => (newGrads[x] = selectedGrads[i]));
+  return { newGrads, minuteRange };
 };
 
 //return conditional gradient according to current time
-const selectGradient = (currentHour, totalhours, sunriseHour) => {
+const selectGradient = (
+  currentHour,
+  totalhours,
+  sunriseHour,
+  sunsetHour,
+  selectedGrads
+) => {
   const current = currentHour * 60;
-  const newDayGrads = minutesCalculation(totalhours, sunriseHour).newDayGrads;
-  // console.log(sunriseHour);
-  // console.log(current);
-  // console.log(newDayGrads);
+  const newGrads = minutesCalculation(
+    totalhours,
+    sunriseHour,
+    sunsetHour,
+    selectedGrads
+  ).newGrads;
+
+  let maxRange = 0;
+  if (selectedGrads === dayGrads) {
+    maxRange = 15;
+  } else {
+    maxRange = 9;
+  }
+
   let i = 0;
-  while (i < 15) {
-    if (current <= parseInt(Object.keys(newDayGrads)[i])) {
-      // console.log(newDayGrads[Object.keys(newDayGrads)[i]]);
-      return newDayGrads[Object.keys(newDayGrads)[i]];
+  while (i < maxRange) {
+    if (current <= parseInt(Object.keys(newGrads)[i])) {
+      return newGrads[Object.keys(newGrads)[i]];
     }
     i++;
   }
 };
-
-// console.log(selectGradient(2, 14, 1));
-// console.log(minutesCalculation(10).newDayGrads);
 
 //capitalize condition description
 const capitalizeInitials = (arr) => {
@@ -229,21 +278,25 @@ const searchData = () => {
         const currentTime = parseInt(response.data.dt);
 
         timeInformation = getTimeInfo(sunrise, sunset, currentTime);
-        timeDifference = getTimeDifference(
+        const selectedGrads = selectGrads(
+          timeInformation.currentHour,
           timeInformation.sunriseHour,
           timeInformation.sunsetHour
         );
-        // console.log(timeInformation.currentHour);
-        // console.log(timeDifference);
-        // console.log(
-        //   selectGradient(timeInformation.currentHour, timeDifference)
-        // );
+        const timeDifference = getTimeDifference(
+          timeInformation.sunriseHour,
+          timeInformation.sunsetHour,
+          selectedGrads
+        );
+
         // apply background for day
         backgroundGrad.style.background = toCSSGradient(
           selectGradient(
             timeInformation.currentHour,
             timeDifference,
-            timeInformation.sunriseHour
+            timeInformation.sunriseHour,
+            timeInformation.sunsetHour,
+            selectedGrads
           )
         );
       })
