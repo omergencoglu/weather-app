@@ -5,7 +5,7 @@ body {
   font-family: "Roboto", sans-serif;
   font-size: 1.5rem;
   color: #4a4b4e;
-  background: hsl(194, 100%, 94%);
+  background: hsl(194, 100%, 82%);
   margin: 0;
 }
 
@@ -113,50 +113,67 @@ img {
 }
 
 /* Elements */
-.container {
+.container,
+.condition {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   height: 100%;
-  transition: 0.5s background ease;
-  -moz-transition: 0.5s background ease;
-  -webkit-transition: 0.5s background ease;
 }
 
 .main-box {
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: white;
-  border-radius: 10%;
+  background: white;
+  border-radius: 40px;
   padding: 20px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 }
 
 .search-bar {
+  display: flex;
   box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
   width: 100%;
   padding: 0 10% 5% 10%;
-  /* border-bottom: 1px solid #b3b4b7; */
 }
 
-#user-input {
+#userInput {
+  display: inline;
   border-color: transparent;
+  background-color: transparent;
   outline: none;
   font-size: large;
+  width: 100%;
 }
 
-.search-bar button,
-input {
+#searchIcon {
   display: inline;
-}
-
-.condt {
-  width: 90%;
+  color: #cacccf;
 }
 
 .condition {
+  width: 100%;
+}
+
+.condition-image {
+  display: block;
+  width: 100%;
+  margin: -10% 0 -10% 0;
+}
+
+#temperature {
+  font-size: 5rem;
+  margin-left: 10%;
+}
+
+#conditionText {
   text-align: center;
-  margin-top: -5%;
+}
+
+#userLocation {
+  margin-top: 3px;
+  font-size: 1.3rem;
 }

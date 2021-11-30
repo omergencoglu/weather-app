@@ -1,8 +1,8 @@
-const input = document.getElementById("user-input");
+const input = document.getElementById("userInput");
 const userLocation = document.getElementById("userLocation");
 const temperature = document.getElementById("temperature");
 const conditionImage = document.getElementById("conditionImage");
-const condition = document.getElementById("condition");
+const conditionText = document.getElementById("conditionText");
 const backgroundGrad = document.getElementById("container");
 
 const dayGrads = [
@@ -169,7 +169,7 @@ const searchData = () => {
         temperature.innerHTML = Math.round(response.data.main.temp) + "°";
         conditionImage.alt = response.data.weather[0].main;
         conditionImage.src = `img/${response.data.weather[0].icon}.svg`;
-        condition.innerHTML = capitalizeInitials(
+        conditionText.innerHTML = capitalizeInitials(
           response.data.weather[0].description
         );
 
