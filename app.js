@@ -3,10 +3,13 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const path = require("path");
 
+const search = require("./public/js/search");
+
 const app = express();
 
 dotenv.config({ path: ".env" });
 const port = process.env.PORT || 8080;
+const weatherAPI = process.env.WEATHER_API;
 
 //log request
 app.use(morgan("tiny"));
@@ -26,8 +29,9 @@ app.get("/", async function (req, res) {
 });
 
 app.get("/:id", async function (req, res) {
-  console.log(req.params);
-  res.render("index", req.params);
+  const response = await search.searchData(req.params.id, weatherAPI);
+  console.log(response);
+  res.render("index", response);
 });
 
 app.listen(port, () => {

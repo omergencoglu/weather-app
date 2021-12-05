@@ -153,63 +153,104 @@ const capitalizeInitials = (arr) => {
   return words.join(" ");
 };
 
-const searchData = () => {
-  const locationInput = input.value;
-  if (!locationInput || Number.isInteger(parseInt(locationInput))) {
-    return console.log("There is no such place!");
-  } else {
-    axios
-      .get(
-        `http://api.openweathermap.org/data/2.5/weather?q=${locationInput}&appid=${config.WEATHER_API}&units=metric`
-      )
-      .then(function (response) {
-        //update divs with new information
-        userLocation.innerHTML =
-          response.data.name + ", " + response.data.sys.country;
-        temperature.innerHTML = Math.round(response.data.main.temp) + "°";
-        conditionImage.alt = response.data.weather[0].main;
-        conditionImage.src = `img/${response.data.weather[0].icon}.svg`;
-        conditionText.innerHTML = capitalizeInitials(
-          response.data.weather[0].description
-        );
+console.log(response);
+//  update divs with new information
+userLocation.innerHTML = response.data.name + ", " + response.data.sys.country;
+temperature.innerHTML = Math.round(response.data.main.temp) + "°";
+conditionImage.alt = response.data.weather[0].main;
+conditionImage.src = `img/${response.data.weather[0].icon}.svg`;
+conditionText.innerHTML = capitalizeInitials(
+  response.data.weather[0].description
+);
 
-        const sunrise = parseInt(response.data.sys.sunrise);
-        const sunset = parseInt(response.data.sys.sunset);
-        const currentTime = parseInt(response.data.dt);
+const sunrise = parseInt(response.data.sys.sunrise);
+const sunset = parseInt(response.data.sys.sunset);
+const currentTime = parseInt(response.data.dt);
 
-        timeInformation = getTimeInfo(sunrise, sunset, currentTime);
-        const selectedGrads = selectGrads(
-          timeInformation.currentHour,
-          timeInformation.sunriseHour,
-          timeInformation.sunsetHour
-        );
-        const timeDifference = getTimeDifference(
-          timeInformation.sunriseHour,
-          timeInformation.sunsetHour,
-          selectedGrads
-        );
-        const backgroundGradClass = backgroundGrad.classList;
+timeInformation = getTimeInfo(sunrise, sunset, currentTime);
+const selectedGrads = selectGrads(
+  timeInformation.currentHour,
+  timeInformation.sunriseHour,
+  timeInformation.sunsetHour
+);
+const timeDifference = getTimeDifference(
+  timeInformation.sunriseHour,
+  timeInformation.sunsetHour,
+  selectedGrads
+);
+const backgroundGradClass = backgroundGrad.classList;
 
-        backgroundGradClass.remove(
-          `${backgroundGradClass[backgroundGradClass.length - 1]}`
-        );
+backgroundGradClass.remove(
+  `${backgroundGradClass[backgroundGradClass.length - 1]}`
+);
 
-        backgroundGradClass.add(
-          selectGradient(
-            timeInformation.currentHour,
-            timeDifference,
-            timeInformation.sunriseHour,
-            timeInformation.sunsetHour,
-            selectedGrads
-          )
-        );
-      })
-      .catch(function (error) {
-        console.log(error);
-        console.log("We couldn't find the place you are looking for!");
-      });
-  }
-};
+backgroundGradClass.add(
+  selectGradient(
+    timeInformation.currentHour,
+    timeDifference,
+    timeInformation.sunriseHour,
+    timeInformation.sunsetHour,
+    selectedGrads
+  )
+);
+
+// const searchData = () => {
+//   const locationInput = input.value;
+//   if (!locationInput || Number.isInteger(parseInt(locationInput))) {
+//     return console.log("There is no such place!");
+//   } else {
+//     axios
+//       .get(
+//         `http://api.openweathermap.org/data/2.5/weather?q=${locationInput}&appid=${weatherAPI}&units=metric`
+//       )
+//       .then(function (response) {
+//         //update divs with new information
+//         userLocation.innerHTML =
+//           response.data.name + ", " + response.data.sys.country;
+//         temperature.innerHTML = Math.round(response.data.main.temp) + "°";
+//         conditionImage.alt = response.data.weather[0].main;
+//         conditionImage.src = `img/${response.data.weather[0].icon}.svg`;
+//         conditionText.innerHTML = capitalizeInitials(
+//           response.data.weather[0].description
+//         );
+
+//         const sunrise = parseInt(response.data.sys.sunrise);
+//         const sunset = parseInt(response.data.sys.sunset);
+//         const currentTime = parseInt(response.data.dt);
+
+//         timeInformation = getTimeInfo(sunrise, sunset, currentTime);
+//         const selectedGrads = selectGrads(
+//           timeInformation.currentHour,
+//           timeInformation.sunriseHour,
+//           timeInformation.sunsetHour
+//         );
+//         const timeDifference = getTimeDifference(
+//           timeInformation.sunriseHour,
+//           timeInformation.sunsetHour,
+//           selectedGrads
+//         );
+//         const backgroundGradClass = backgroundGrad.classList;
+
+//         backgroundGradClass.remove(
+//           `${backgroundGradClass[backgroundGradClass.length - 1]}`
+//         );
+
+//         backgroundGradClass.add(
+//           selectGradient(
+//             timeInformation.currentHour,
+//             timeDifference,
+//             timeInformation.sunriseHour,
+//             timeInformation.sunsetHour,
+//             selectedGrads
+//           )
+//         );
+//       })
+//       .catch(function (error) {
+//         console.log(error);
+//         console.log("We couldn't find the place you are looking for!");
+//       });
+//   }
+// };
 
 //search when enter pressed
 input.addEventListener("keyup", ({ key }) => {
