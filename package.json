@@ -20,6 +20,11 @@
     "url": "https://github.com/omergencoglu/weather-app/issues"
   },
   "homepage": "https://github.com/omergencoglu/weather-app#readme",
-  "dependencies": {},
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  },
   "devDependencies": {}
 }
