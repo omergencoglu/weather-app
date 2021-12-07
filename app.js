@@ -27,15 +27,24 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", async function (req, res) {
-  const response = await search.searchData("toronto", weatherAPI);
-  const selectedGradient = gradientSelection.makeSelection(response);
-  res.render("index", { response, utils, selectedGradient });
+  try {
+    const response = await search.searchData("toronto", weatherAPI);
+    const selectedGradient = gradientSelection.makeSelection(response);
+    res.render("index", { response, utils, selectedGradient });
+  } catch (error) {
+    console.log("error");
+  }
 });
 
 app.get("/search", async function (req, res) {
-  const response = await search.searchData(req.query.city, weatherAPI);
-  const selectedGradient = gradientSelection.makeSelection(response);
-  res.render("index", { response, utils, selectedGradient });
+  try {
+    const response = await search.searchData(req.query.city, weatherAPI);
+    const selectedGradient = gradientSelection.makeSelection(response);
+    res.render("index", { response, utils, selectedGradient });
+  } catch (error) {
+    console.log("error");
+    res.redirect("/");
+  }
 });
 
 app.listen(port, () => {

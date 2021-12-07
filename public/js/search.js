@@ -10,8 +10,7 @@ async function searchData(locationInput, weatherAPI) {
       );
       return response;
     } catch (error) {
-      console.log(error);
-      console.log("We couldn't find the place you are looking for!");
+      return "error";
     }
   }
 }
