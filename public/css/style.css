@@ -120,6 +120,11 @@ img {
   justify-content: center;
   flex-direction: column;
   height: 100%;
+  width: 100%;
+}
+
+.container {
+  position: absolute;
 }
 
 .main-box {
@@ -156,10 +161,6 @@ img {
   cursor: pointer;
   display: inline;
   color: #4a4b4e;
-}
-
-.condition {
-  width: 100%;
 }
 
 .condition-image {
