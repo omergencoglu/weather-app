@@ -6,4 +6,4 @@ Get realtime weather information of searched locations with changing background 
 - Background gradient changes based on the searched location's sunrise and sunset time information collected from API call.
 - Weatherlify scores 100% across all categories on the Chrome Lighthouse audit report - a Perfect Score Website
 
-Check out <a href="https://weatherlify.herokuapp.com/" target="_blank" rel="noopener noreferrer">Weatherlify</a>
+Check out <a href="https://weatherlify.onrender.com/" target="_blank" rel="noopener noreferrer">Weatherlify</a>
